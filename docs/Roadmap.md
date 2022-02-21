@@ -1,0 +1,34 @@
+## MVP
+* Fix any html issues
+* Improve styling
+* make a more meaningful site.yaml example
+* figure out how to move to next row when too much space is used
+* Make day night mode configureable
+* Write tests
+* Get badges
+
+# v0.0.2
+* log level configuration, meaningful debug logging
+* submission endpoint
+  * put a yaml/json doc to endpoint and it will render to webpage
+  * validates config
+* tls 
+
+# v0.0.3
+* change wipeout
+* merge submissions with existing stuff
+
+# v0.0.4
+* use db
+
+1.0!
+
+## links
+
+* https://www.w3schools.com/html/default.asp
+* https://pkg.go.dev/net/http#example-FileServer
+* https://stackoverflow.com/questions/17509420/go-templates-are-nested-ranges-possible
+* https://www.sohamkamani.com/golang/json/#decoding-json-to-maps---unstructured-data
+* https://stackoverflow.com/questions/34440646/how-to-create-a-generic-function-to-unmarshal-all-types
+* https://pkg.go.dev/text/template#pkg-types
+* https://gobyexample.com/signals

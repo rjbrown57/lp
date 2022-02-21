@@ -1,0 +1,84 @@
+# LP
+
+## LP config example
+
+```
+lpconfig: # Basic config for lp
+  rootDir: /html
+  port: 8080
+  tls:
+    key: /tls/tls.key
+    cert: /tls/tls.crt
+    ca: /tls/ca.crt
+  sitename: lp
+```
+
+## Site Template Example
+
+Template,pages,Headings are required. Links can be specified in solo as a "Url" or as a group with "Urls"
+
+```
+Template:
+  Theme: "light" # https://primer.style/css/support/theming#set-a-theme
+  Pages:
+    - Name: index
+      Headings:
+        - Name: Github Repos
+          Links:
+          - Name: Kubernetes
+            Url: https://github.com/kubernetes/kubernetes
+          - Name: harbor
+            Url: https://github.com/goharbor/harbor
+          - Name: Container Tools
+            Urls: 
+              - cosign: https://github.com/sigstore/cosign
+              - crane: https://github.com/google/go-containerregistry/
+              - syft: https://github.com/anchore/syft
+              - grype: https://github.com/anchore/grype 
+              - cst: https://github.com/GoogleContainerTools/container-structure-test
+              - ko: https://github.com/google/ko
+        - Name: My Personal Projects
+          Links:
+          - Name: LP
+            Url: https://github.com/rjbrown57/lp
+          - Name: Binextractor
+            Url: https://github.com/rjbrown57/binextractor
+        - Name: Tools
+          Links:
+          - Name: Grafana
+            Url: https://github.com/grafana/grafana
+          - Name: Prometheus
+            Url: https://github.com/prometheus
+          - Name: kernel.org
+            Url: https://kernel.org/
+    - Name: index2
+      Headings:
+        - Name: Github Repos
+          Links:
+          - Name: Kubernetes
+            Url: https://github.com/kubernetes/kubernetes
+          - Name: harbor
+            Url: https://github.com/goharbor/harbor
+          - Name: Container Tools
+            Urls: 
+              - cosign: https://github.com/sigstore/cosign
+              - crane: https://github.com/google/go-containerregistry/
+              - syft: https://github.com/anchore/syft
+              - grype: https://github.com/anchore/grype 
+              - cst: https://github.com/GoogleContainerTools/container-structure-test
+              - ko: https://github.com/google/ko
+        - Name: My Personal Projects
+          Links:
+          - Name: LP
+            Url: https://github.com/rjbrown57/lp
+          - Name: Binextractor
+            Url: https://github.com/rjbrown57/binextractor
+        - Name: Tools
+          Links:
+          - Name: Grafana
+            Url: https://github.com/grafana/grafana
+          - Name: Prometheus
+            Url: https://github.com/prometheus
+          - Name: kernel.org
+            Url: https://kernel.org/
+```
