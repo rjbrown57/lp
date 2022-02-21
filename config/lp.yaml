@@ -1,0 +1,8 @@
+lpconfig: # Basic config for lp
+  rootDir: /html
+  port: 8080
+  tls:
+    key: /tls/tls.key
+    cert: /tls/tls.crt
+    ca: /tls/ca.crt
+  sitename: lp

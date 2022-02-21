@@ -1,0 +1,74 @@
+Template:
+  Pages:
+    - Name: index
+      Headings:
+        - Name: github.com
+          Links:
+          - Name: gocontainerregistry
+            Url: https://github.com/google/go-containerregistry/
+          - Name: harbor
+            Url: https://github.com/goharbor/harbor
+        - Name: github.com
+          Links:
+          - Name: gocontainerregistry
+            Url: https://github.com/google/go-containerregistry/
+          - Name: harbor
+            Url: https://github.com/goharbor/harbor
+        - Name: github.com
+          Links:
+          - Name: gocontainerregistry
+            Url: https://github.com/google/go-containerregistry/
+          - Name: harbor
+            Url: https://github.com/goharbor/harbor
+        - Name: github.com
+          Links:
+          - Name: gocontainerregistry
+            Url: https://github.com/google/go-containerregistry/
+          - Name: harbor
+            Url: https://github.com/goharbor/harbor
+        - Name: github.com
+          Links:
+          - Name: gocontainerregistry
+            Url: https://github.com/google/go-containerregistry/
+          - Name: harbor
+            Url: https://github.com/goharbor/harbor
+        - Name: github.com
+          Links:
+          - Name: gocontainerregistry
+            Url: https://github.com/google/go-containerregistry/
+          - Name: harbor
+            Url: https://github.com/goharbor/harbor
+        - Name: music
+          Links:
+          - Name: sterogum
+            Url: https://www.stereogum.com/
+        - Name: parks
+          Links:
+          - Name: echantedrock
+            Url: https://tpwd.texas.gov/state-parks/enchanted-rock
+          - Name: beaconrock
+            Url: https://www.parks.wa.gov/474/Beacon-Rock
+          - Name: echantedrock
+            Url: https://tpwd.texas.gov/state-parks/enchanted-rock
+          - Name: beaconrock
+            Url: https://www.parks.wa.gov/474/Beacon-Rock
+          - Name: echantedrock
+            Url: https://tpwd.texas.gov/state-parks/enchanted-rock
+          - Name: beaconrock
+            Url: https://www.parks.wa.gov/474/Beacon-Rock
+          - Name: echantedrock
+            Url: https://tpwd.texas.gov/state-parks/enchanted-rock
+          - Name: beaconrock
+            Url: https://www.parks.wa.gov/474/Beacon-Rock
+    - Name: index2
+      Headings:
+        - Name: github.com
+          Links:
+          - Name: gocontainerregistry
+            Url: https://github.com/google/go-containerregistry/
+          - Name: harbor
+            Url: https://github.com/goharbor/harbor
+        - Name: music
+          Links:
+          - Name: sterogum
+            Url: https://www.stereogum.com/

@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  lp:
+    image: ghcr.io/rjbrown57/lp:latest
+    container_name: lp
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    volumes:
+      - ./config:/config/
