@@ -25,3 +25,8 @@ Flags:
   -s, --siteTempalte string   site template see https://github.com/rjbrown57/lp/blob/main/config/site.yaml (default "config/site.yaml")
   -t, --toggle                Help message for toggle
 ```
+
+## Use with
+
+* https://addons.mozilla.org/en-US/firefox/addon/new-tab-override/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search
+* https://chrome.google.com/webstore/detail/new-tab-redirect/icpgjfneehieebagbmdbhnlpiopdcmna?hl=en-GB
