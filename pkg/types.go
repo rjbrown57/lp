@@ -1,6 +1,6 @@
 package lp
 
-// Config file
+// LpConfig set config for site hosting
 type LpConfig struct {
 	Lpconfig struct {
 		RootDir  string `yaml:"rootDir"`
@@ -14,7 +14,7 @@ type LpConfig struct {
 	} `yaml:"lpconfig"`
 }
 
-// Site config
+// SiteData is the meat and potatoes of LP. Used to create html page of links.
 type SiteData struct {
 	Template struct {
 		Theme string `yaml:"Theme,omitempty"`
@@ -23,8 +23,8 @@ type SiteData struct {
 			Headings []struct {
 				Name  string `yaml:"Name"`
 				Links []struct {
-					Name string `yaml:"Name"`
-					Url  string `yaml:"Url,omitempty"`
+					Name string              `yaml:"Name"`
+					Url  string              `yaml:"Url,omitempty"`
 					Urls []map[string]string `yaml:"Urls,omitempty"`
 				} `yaml:"Links"`
 			} `yaml:"Headings"`

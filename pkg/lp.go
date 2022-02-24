@@ -74,6 +74,7 @@ func serveLP(htmlDir string, port string) {
 	log.Fatal(http.ListenAndServe(port, http.FileServer(http.Dir(htmlDir))))
 }
 
+// Lp calls mustUnmarshalYaml for configs, writePages to write appropriate files, serveLP to host
 func Lp(lpconfig string, siteTempalte string) {
 	config := &LpConfig{}
 	siteData := &SiteData{}
@@ -98,7 +99,7 @@ func Lp(lpconfig string, siteTempalte string) {
 
 	go func() {
 		sig := <-sigs
-		log.Printf("Recieved %s. Cleaning up %s\n", sig, tDir)
+		log.Printf("Received %s. Cleaning up %s\n", sig, tDir)
 		done <- true
 	}()
 

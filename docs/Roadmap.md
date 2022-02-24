@@ -1,20 +1,21 @@
 ## MVP
 * Fix any html issues
 * Improve styling
-* make a more meaningful site.yaml example
-* figure out how to move to next row when too much space is used
-* Make day night mode configureable
+~~* make a more meaningful site.yaml example~~
+~~* figure out how to move to next row when too much space is used~~
+~~* Make day night mode configureable~~
 * Write tests
 * Get badges
 
 # v0.0.2
 * log level configuration, meaningful debug logging
+* tls 
+* add a stdout output option that does not host page
+
+# v0.0.3
 * submission endpoint
   * put a yaml/json doc to endpoint and it will render to webpage
   * validates config
-* tls 
-
-# v0.0.3
 * change wipeout
 * merge submissions with existing stuff
 
