@@ -18,7 +18,7 @@ const navbarTemplate = `
     <div class="UnderlineNav-body">
       {{- range .Template.Pages }}
         <a class="UnderlineNav-item" href="{{ .Name }}.html">{{ .Name }}</a>
-      {{ end }}
+      {{- end }}
       <a class="UnderlineNav-item" href="https://github.com/rjbrown57/lp.git">lp</a>
     </div>
 </nav>
@@ -32,28 +32,29 @@ const bodyTemplate = `
         <b>{{ .Name }}</b>
         <p><ul>
           {{- range .Links }}
-          {{ if .Url }}
+          {{- if .Url }}
           <li><a href="{{ .Url }}">{{ .Name }}</a></li>
-          {{ end }}
-          {{ if .Urls }}
+          {{- end }}
+          {{- if .Urls }}
           <div style="m-4">
           <li>{{ .Name }}
           <details class="dropdown details-reset details-overlay d-inline-block">
           <summary class="color-fg-muted p-2 d-inline" aria-haspopup="true">
-          <div class="dropdown-caret"></div>
+            <div class="dropdown-caret"></div>
           </summary>
           <ul class="dropdown-menu dropdown-menu-se">
-          {{ range $index,$url := .Urls }}
-            {{ range $k,$v := $url }}
+          {{- range $index,$url := .Urls }}
+            {{- range $k,$v := $url }}
             <li><a class="dropdown-item" href="{{ $v }}">{{ $k }}</a></li>
             {{- end }}
           {{- end }}
           </ul>
           </details>
+          </li>
           </div>
           {{- end }}
           {{- end }}
-        </ul></p></li>
+        </ul></p>
         </div>
       {{- end }}
     </div>
