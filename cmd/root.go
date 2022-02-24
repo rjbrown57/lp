@@ -48,7 +48,7 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVarP(&lpConfig, "lpConfig", "l", "config/lp.yaml", "base config for lp see https://github.com/rjbrown57/lp/blob/main/config/lp.yaml")
-	rootCmd.PersistentFlags().StringVarP(&siteTemplate, "siteTempalte", "s", "config/site.yaml", "site tempalte see https://github.com/rjbrown57/lp/blob/main/config/site.yaml")
+	rootCmd.PersistentFlags().StringVarP(&siteTemplate, "siteTempalte", "s", "config/site.yaml", "site template see https://github.com/rjbrown57/lp/blob/main/config/site.yaml")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
