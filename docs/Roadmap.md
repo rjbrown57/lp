@@ -1,6 +1,6 @@
 ## MVP
-* Fix any html issues
-* Improve styling
+~~* Fix any html issues~~
+~~* Improve styling~~
 ~~* make a more meaningful site.yaml example~~
 ~~* figure out how to move to next row when too much space is used~~
 ~~* Make day night mode configureable~~
@@ -8,9 +8,15 @@
 * Get badges
 
 # v0.0.2
+~~* is index file blooean~~
+* bigger font
+* Allow specifiying and merging of multiple site config files
+* Alphabetize All the things
 * log level configuration, meaningful debug logging
 * tls 
 * add a stdout output option that does not host page
+* Styling improvements
+* Improve Readme
 
 # v0.0.3
 * submission endpoint
@@ -18,9 +24,12 @@
   * validates config
 * change wipeout
 * merge submissions with existing stuff
+* Styling improvements
 
 # v0.0.4
 * use db
+* search bar
+* Styling improvements
 
 1.0!
 
