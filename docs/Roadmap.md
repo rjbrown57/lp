@@ -19,6 +19,7 @@
 * Improve Readme
 
 # v0.0.3
+* Allow site config files to be supplied via directory
 * submission endpoint
   * put a yaml/json doc to endpoint and it will render to webpage
   * validates config

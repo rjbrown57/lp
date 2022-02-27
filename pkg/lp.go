@@ -85,10 +85,36 @@ func serveLP(htmlDir string, port string) {
 	log.Fatal(http.ListenAndServe(port, http.FileServer(http.Dir(htmlDir))))
 }
 
+// mergePages will allow user to supply multiple page templates and merge them together
+func mergePages(siteTemplate []string) SiteData {
+
+	mergedSiteData := &SiteData{}
+
+	var sites []SiteData
+
+	for _, st := range siteTemplate {
+		siteData := &SiteData{}
+		mustUnmarshalYaml(st, siteData)
+		sites = append(sites, *siteData)
+	}
+
+	//initialize mergedSiteData with first element
+	mergedSiteData.Template = sites[0].Template
+
+	// Skip the first element since we take it above
+	for _, st := range sites[1:] {
+		mergedSiteData.Template.Pages = append(mergedSiteData.Template.Pages, st.Template.Pages...)
+	}
+
+	return *mergedSiteData
+}
+
 // Lp calls mustUnmarshalYaml for configs, writePages to write appropriate files, serveLP to host
-func Lp(lpconfig string, siteTempalte string) {
+func Lp(lpconfig string, siteTemplate []string) {
 	config := &LpConfig{}
-	siteData := &SiteData{}
+
+	//Merge all site templates supplied by user
+	st := mergePages(siteTemplate)
 
 	tDir, err := os.MkdirTemp("/tmp/", "lp")
 	if err != nil {
@@ -98,9 +124,8 @@ func Lp(lpconfig string, siteTempalte string) {
 	defer os.RemoveAll(tDir)
 
 	mustUnmarshalYaml(lpconfig, config)
-	mustUnmarshalYaml(siteTempalte, siteData)
 
-	writePages(siteData, tDir)
+	writePages(&st, tDir)
 
 	go serveLP(tDir, fmt.Sprintf(":%d", config.Lpconfig.Port))
 

@@ -1,0 +1,18 @@
+Template:
+  Pages:
+    - Name: 3rd # A page name will be visible on rendered lp
+      Headings:
+        - Name: Github Repos
+          Links:
+          - Name: Kubernetes # A singe link
+            Url: https://github.com/kubernetes/kubernetes
+          - Name: harbor
+            Url: https://github.com/goharbor/harbor
+          - Name: Container Tools # a dropdown set of links that will appear in heading "Container Tools"
+            Urls: 
+              - cosign: https://github.com/sigstore/cosign
+              - crane: https://github.com/google/go-containerregistry/
+              - syft: https://github.com/anchore/syft
+              - grype: https://github.com/anchore/grype 
+              - cst: https://github.com/GoogleContainerTools/container-structure-test
+              - ko: https://github.com/google/ko

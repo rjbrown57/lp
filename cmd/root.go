@@ -7,7 +7,8 @@ import (
 )
 
 var cfgFile string
-var lpConfig, siteTemplate string
+var lpConfig string
+var siteTemplate []string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -32,8 +33,13 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
+	siteTemplateDefault := []string{"config/site.yaml"}
+
 	rootCmd.PersistentFlags().StringVarP(&lpConfig, "lpConfig", "l", "config/lp.yaml", "base config for lp see https://github.com/rjbrown57/lp/blob/main/config/lp.yaml")
-	rootCmd.PersistentFlags().StringVarP(&siteTemplate, "siteTemplate", "s", "config/site.yaml", "site template see https://github.com/rjbrown57/lp/blob/main/config/site.yaml")
+	rootCmd.PersistentFlags().StringSliceVarP(&siteTemplate, "siteTemplate", "s", siteTemplateDefault, "comma seperated list of site tempaltes. See https://github.com/rjbrown57/lp/blob/main/config/site.yaml")
+
+	rootCmd.MarkFlagRequired("siteTemplate")
+	rootCmd.MarkFlagRequired("lpConfig")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
