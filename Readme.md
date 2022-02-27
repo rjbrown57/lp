@@ -4,4 +4,6 @@
 
 Serve a webpage of useful links based on a yaml document
 
+![intro](docs/images/screenshot.png)
+
 [View the Docs](https://rjbrown57.github.io/lp/)

@@ -91,7 +91,7 @@ Clone the repo and run `docker-compose up -d`. This will use the example [site.y
 
 You could also run with `docker run -i -t -p 8080:8080 -v "${PWD}/config:/config" ghcr.io/rjbrown57/lp:latest` to get the same result
 
-Last option is to grab a release and simply run `./lp_0.0.1_version_here` locally
+Last option is to grab a release and simply run `./lp_0.0.1_version_here -l path/to/lpConfig -s path/to/siteConfig1,path/to/siteConfig2` locally
 
 ```
 ./lp --help
@@ -101,10 +101,10 @@ Usage:
   lp [flags]
 
 Flags:
-  -h, --help                  help for lp
-  -l, --lpConfig string       base config for lp see https://github.com/rjbrown57/lp/blob/main/config/lp.yaml (default "config/lp.yaml")
-  -s, --siteTempalte string   site template see https://github.com/rjbrown57/lp/blob/main/config/site.yaml (default "config/site.yaml")
-  -t, --toggle                Help message for toggle
+  -h, --help                   help for lp
+  -l, --lpConfig string        base config for lp see https://github.com/rjbrown57/lp/blob/main/config/lp.yaml (default "config/lp.yaml")
+  -s, --siteTemplate strings   comma seperated list of site tempaltes. See https://github.com/rjbrown57/lp/blob/main/config/site.yaml (default [config/site.yaml])
+  -t, --toggle                 Help message for toggle
 ```
 
 ## Use with these browser plugins!
