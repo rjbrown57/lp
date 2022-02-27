@@ -27,6 +27,11 @@ func mustUnmarshalYaml(configPath string, v interface{}) {
 	}
 }
 
+// processTemplate returns the template object
+func processTemplate(templateName string, goTemplate string) *template.Template {
+	return template.Must(template.New(templateName).Parse(goTemplate))
+}
+
 // write pages
 //https://yourbasic.org/golang/append-to-file/
 // update to write generated tmpdir and then serve from that
@@ -49,7 +54,7 @@ func writePages(siteData *SiteData, tDir string) {
 		}
 
 		// render common
-		t := template.Must(template.New("common").Parse(commonTemplate))
+		t := processTemplate("common", commonTemplate)
 		err = t.Execute(file, siteData)
 		if err != nil {
 			log.Printf("common template render error #%v\n", err)
@@ -57,7 +62,7 @@ func writePages(siteData *SiteData, tDir string) {
 		}
 
 		// render navbar
-		t = template.Must(template.New("navbar").Parse(navbarTemplate))
+		t = processTemplate("navbar", navbarTemplate)
 		err = t.Execute(file, siteData)
 		if err != nil {
 			log.Printf("navbar template render error #%v\n", err)
@@ -65,7 +70,7 @@ func writePages(siteData *SiteData, tDir string) {
 		}
 
 		// render body
-		t = template.Must(template.New("body").Parse(bodyTemplate))
+		t = processTemplate("body", bodyTemplate)
 		err = t.Execute(file, page)
 		if err != nil {
 			log.Printf("body template render error #%v\n", err)
