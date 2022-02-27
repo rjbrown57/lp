@@ -4,6 +4,7 @@ package lp
 // https://primer.style/css/utilities/flexbox
 // https://primer.style/css/components/select-menu
 
+// commonTemplate should be sent a SiteData template to render
 const commonTemplate = `<!doctype html>
 <html data-color-mode="dark" data-dark-theme="{{ .Template.Theme }}" lang="en">
 <head>
@@ -13,6 +14,7 @@ const commonTemplate = `<!doctype html>
 </head>
 `
 
+// navbarTemplate should be sent a SiteData template to render
 const navbarTemplate = `
 <nav class="UnderlineNav UnderlineNav--full">
     <div class="UnderlineNav-body">
@@ -28,6 +30,7 @@ const navbarTemplate = `
 </nav>
 `
 
+// bodyTemplate should be sent a pages Struct to render
 const bodyTemplate = `
 <body>
     <div class="m-2 d-flex color-bg-subtle flex-justify-start flex-wrap">
