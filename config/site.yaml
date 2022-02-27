@@ -1,7 +1,8 @@
 Template:
   Theme: "light" # https://primer.style/css/support/theming#set-a-theme
   Pages:
-    - Name: index
+    - Name: Main
+      IsIndex: True 
       Headings:
         - Name: Github Repos
           Links:
@@ -31,7 +32,7 @@ Template:
             Url: https://github.com/prometheus
           - Name: kernel.org
             Url: https://kernel.org/
-    - Name: index2
+    - Name: second page
       Headings:
         - Name: Github Repos
           Links:

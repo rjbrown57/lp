@@ -31,9 +31,15 @@ func mustUnmarshalYaml(configPath string, v interface{}) {
 //https://yourbasic.org/golang/append-to-file/
 // update to write generated tmpdir and then serve from that
 func writePages(siteData *SiteData, tDir string) {
-	for _, page := range siteData.Template.Pages {
 
-		fileName := fmt.Sprintf(tDir + "/" + page.Name + ".html")
+	var fileName string
+
+	for _, page := range siteData.Template.Pages {
+		if page.IsIndex {
+			fileName = fmt.Sprintf(tDir + "/index.html")
+		} else {
+			fileName = fmt.Sprintf(tDir + "/" + page.Name + ".html")
+		}
 		log.Printf("Creating %s\n", fileName)
 
 		file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)

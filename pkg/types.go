@@ -19,6 +19,7 @@ type SiteData struct {
 	Template struct {
 		Theme string `yaml:"Theme,omitempty"`
 		Pages []struct {
+			IsIndex  bool   `yaml:"IsIndex,omitempty"`
 			Name     string `yaml:"Name"`
 			Headings []struct {
 				Name  string `yaml:"Name"`

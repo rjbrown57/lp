@@ -17,7 +17,11 @@ const navbarTemplate = `
 <nav class="UnderlineNav UnderlineNav--full">
     <div class="UnderlineNav-body">
       {{- range .Template.Pages }}
+        {{- if .IsIndex }}
+        <a class="UnderlineNav-item" href="index.html">{{ .Name }}</a>
+        {{- else }}
         <a class="UnderlineNav-item" href="{{ .Name }}.html">{{ .Name }}</a>
+        {{- end}}
       {{- end }}
       <a class="UnderlineNav-item" href="https://github.com/rjbrown57/lp.git">lp</a>
     </div>
