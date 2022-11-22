@@ -39,7 +39,7 @@ Template:
             Url: https://github.com/prometheus
           - Name: kernel.org
             Url: https://kernel.org/
-    - Name: second page
+    - Name: secondpage
       Headings:
         - Name: Github Repos
           Links:
