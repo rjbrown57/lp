@@ -33,7 +33,7 @@ func processTemplate(templateName string, goTemplate string) *template.Template 
 }
 
 // write pages
-//https://yourbasic.org/golang/append-to-file/
+// https://yourbasic.org/golang/append-to-file/
 // update to write generated tmpdir and then serve from that
 func writePages(siteData *SiteData, tDir string) {
 
@@ -110,24 +110,35 @@ func mergePages(siteTemplate []string) SiteData {
 }
 
 // Lp calls mustUnmarshalYaml for configs, writePages to write appropriate files, serveLP to host
-func Lp(lpconfig string, siteTemplate []string) {
+func Lp(action string, lpconfig string, siteTemplate []string) {
+
 	config := &LpConfig{}
+	mustUnmarshalYaml(lpconfig, config)
+	var err error
 
 	//Merge all site templates supplied by user
 	st := mergePages(siteTemplate)
 
-	tDir, err := os.MkdirTemp("/tmp/", "lp")
-	if err != nil {
-		log.Println("unable to create temporary directory")
+	if config.Lpconfig.RootDir == "" {
+		config.Lpconfig.RootDir, err = os.MkdirTemp("/tmp/", "lp")
+		if err != nil {
+			log.Println("unable to create temporary directory")
+		}
+
+		defer os.RemoveAll(config.Lpconfig.RootDir)
 	}
 
-	defer os.RemoveAll(tDir)
+	log.Printf("Using %s as html root\n", config.Lpconfig.RootDir)
 
-	mustUnmarshalYaml(lpconfig, config)
+	writePages(&st, config.Lpconfig.RootDir)
 
-	writePages(&st, tDir)
+	// If we are called by generate, return without serving page
+	if action == "generate" {
+		return
+	}
 
-	go serveLP(tDir, fmt.Sprintf(":%d", config.Lpconfig.Port))
+	log.Printf("Serving LP on :%d\n", config.Lpconfig.Port)
+	go serveLP(config.Lpconfig.RootDir, fmt.Sprintf(":%d", config.Lpconfig.Port))
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
@@ -135,10 +146,9 @@ func Lp(lpconfig string, siteTemplate []string) {
 
 	go func() {
 		sig := <-sigs
-		log.Printf("Received %s. Cleaning up %s\n", sig, tDir)
+		log.Printf("Received %s. Cleaning up %s\n", sig, config.Lpconfig.RootDir)
 		done <- true
 	}()
 
 	<-done
-
 }

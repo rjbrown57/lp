@@ -16,7 +16,7 @@ var rootCmd = &cobra.Command{
 	Short: "Host a yaml based static link page",
 	Long:  `A yaml based static link page for every day work use.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		lp.Lp(lpConfig, siteTemplate)
+		lp.Lp("serve", lpConfig, siteTemplate)
 	},
 }
 
@@ -32,6 +32,7 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
+	rootCmd.AddCommand(generateCmd)
 
 	siteTemplateDefault := []string{"config/site.yaml"}
 
