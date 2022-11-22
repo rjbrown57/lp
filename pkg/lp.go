@@ -10,6 +10,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/fsnotify/fsnotify"
 	"gopkg.in/yaml.v2"
 )
 
@@ -53,6 +54,11 @@ func writePages(siteData *SiteData, tDir string) {
 			os.Exit(1)
 		}
 
+		err = os.Truncate(fileName, 0)
+		if err != nil {
+			log.Printf("Unable to truncate file %s", fileName)
+		}
+
 		// render common
 		t := processTemplate("common", commonTemplate)
 		err = t.Execute(file, siteData)
@@ -83,6 +89,38 @@ func writePages(siteData *SiteData, tDir string) {
 // serveLP
 func serveLP(htmlDir string, port string) {
 	log.Fatal(http.ListenAndServe(port, http.FileServer(http.Dir(htmlDir))))
+}
+
+func getWatcher(siteTemplate []string) *fsnotify.Watcher {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatalf("Unable to start fsnotify watcher %s", err)
+	}
+
+	for _, site := range siteTemplate {
+		log.Printf("Watching %s for changes\n", site)
+		watcher.Add(site)
+	}
+
+	return watcher
+}
+
+func monitorChanges(w *fsnotify.Watcher, siteTemplate []string, tDir string) {
+	for {
+		select {
+		// Read Errors
+		case err, ok := <-w.Errors:
+			if !ok { // Channel was closed (i.e. Watcher.Close() was called).
+				return
+			}
+			log.Printf("Fsnotify ERROR: %s", err)
+		// No matter what the return event is we should rerun writePages
+		case _, _ = <-w.Events:
+			st := mergePages(siteTemplate)
+			writePages(&st, tDir)
+			log.Printf("Change detected. Regenerating...")
+		}
+	}
 }
 
 // mergePages will allow user to supply multiple page templates and merge them together
@@ -143,6 +181,11 @@ func Lp(action string, lpconfig string, siteTemplate []string) {
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 	done := make(chan bool, 1)
+
+	w := getWatcher(siteTemplate)
+	defer w.Close()
+
+	go monitorChanges(w, siteTemplate, config.Lpconfig.RootDir)
 
 	go func() {
 		sig := <-sigs
