@@ -36,7 +36,7 @@ func init() {
 	siteTemplateDefault := []string{"config/site.yaml"}
 
 	rootCmd.PersistentFlags().StringVarP(&lpConfig, "lpConfig", "l", "config/lp.yaml", "base config for lp see https://github.com/rjbrown57/lp/blob/main/config/lp.yaml")
-	rootCmd.PersistentFlags().StringSliceVarP(&siteTemplate, "siteTemplate", "s", siteTemplateDefault, "comma seperated list of site tempaltes. See https://github.com/rjbrown57/lp/blob/main/config/site.yaml")
+	rootCmd.PersistentFlags().StringSliceVarP(&siteTemplate, "siteTemplate", "s", siteTemplateDefault, "comma seperated list of site templates. See https://github.com/rjbrown57/lp/blob/main/config/site.yaml")
 
 	rootCmd.MarkFlagRequired("siteTemplate")
 	rootCmd.MarkFlagRequired("lpConfig")
