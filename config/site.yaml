@@ -61,6 +61,8 @@ Template:
             Url: https://github.com/rjbrown57/lp
           - Name: Binextractor
             Url: https://github.com/rjbrown57/binextractor
+          - Name: Binman
+            Url: https://github.com/rjbrown57/binman
         - Name: Tools
           Links:
           - Name: Grafana
