@@ -91,19 +91,27 @@ Clone the repo and run `docker-compose up -d`. This will use the example [site.y
 
 You could also run with `docker run -i -t -p 8080:8080 -v "${PWD}/config:/config" ghcr.io/rjbrown57/lp:latest` to get the same result
 
-Last option is to grab a release and simply run `./lp_0.0.1_version_here -l path/to/lpConfig -s path/to/siteConfig1,path/to/siteConfig2` locally
+Executing lp as a go binary is also an option run `./lp -l path/to/lpConfig -s path/to/siteConfig1,path/to/siteConfig2` to serve page on the port defined in lpConfig. 
+
+Run `./lp generate -f -l path/to/lpConfig -s path/to/siteConfig1,path/to/siteConfig2` to only run the config generation(use -f for regenerate on change). You can then serve the supplied root with another more featued web server for example [caddy](https://github.com/caddyserver/caddy).
+
 
 ```
-./lp --help
 A yaml based static link page for every day work use.
 
 Usage:
   lp [flags]
+  lp [command]
+
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  generate    generate html from yaml
+  help        Help about any command
 
 Flags:
   -h, --help                   help for lp
   -l, --lpConfig string        base config for lp see https://github.com/rjbrown57/lp/blob/main/config/lp.yaml (default "config/lp.yaml")
-  -s, --siteTemplate strings   comma seperated list of site tempaltes. See https://github.com/rjbrown57/lp/blob/main/config/site.yaml (default [config/site.yaml])
+  -s, --siteTemplate strings   comma seperated list of site templates. See https://github.com/rjbrown57/lp/blob/main/config/site.yaml (default [config/site.yaml])
   -t, --toggle                 Help message for toggle
 ```
 

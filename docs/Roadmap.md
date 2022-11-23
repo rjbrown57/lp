@@ -10,10 +10,10 @@
 # v0.0.2
 ~~* is index file blooean~~
 * bigger font
-* Allow specifiying and merging of multiple site config files
+~~* Allow specifiying and merging of multiple site config files~~
 * Alphabetize All the things
 * log level configuration, meaningful debug logging
-* tls 
+~~* tls~~ 
 * add a stdout output option that does not host page
 * Styling improvements
 * Improve Readme
