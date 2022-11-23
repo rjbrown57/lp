@@ -39,7 +39,7 @@ Template:
             Url: https://github.com/prometheus
           - Name: kernel.org
             Url: https://kernel.org/
-    - Name: second page
+    - Name: secondpage
       Headings:
         - Name: Github Repos
           Links:
@@ -61,6 +61,8 @@ Template:
             Url: https://github.com/rjbrown57/lp
           - Name: Binextractor
             Url: https://github.com/rjbrown57/binextractor
+          - Name: Binman
+            Url: https://github.com/rjbrown57/binman
         - Name: Tools
           Links:
           - Name: Grafana

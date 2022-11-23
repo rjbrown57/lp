@@ -9,6 +9,7 @@ import (
 var cfgFile string
 var lpConfig string
 var siteTemplate []string
+var genFollow bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -16,7 +17,7 @@ var rootCmd = &cobra.Command{
 	Short: "Host a yaml based static link page",
 	Long:  `A yaml based static link page for every day work use.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		lp.Lp(lpConfig, siteTemplate)
+		lp.Lp("serve", genFollow, lpConfig, siteTemplate)
 	},
 }
 
@@ -32,11 +33,13 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
+	rootCmd.AddCommand(generateCmd)
+	generateCmd.PersistentFlags().BoolVarP(&genFollow, "follow", "f", false, "-f to watch for changes and regenerate")
 
 	siteTemplateDefault := []string{"config/site.yaml"}
 
 	rootCmd.PersistentFlags().StringVarP(&lpConfig, "lpConfig", "l", "config/lp.yaml", "base config for lp see https://github.com/rjbrown57/lp/blob/main/config/lp.yaml")
-	rootCmd.PersistentFlags().StringSliceVarP(&siteTemplate, "siteTemplate", "s", siteTemplateDefault, "comma seperated list of site tempaltes. See https://github.com/rjbrown57/lp/blob/main/config/site.yaml")
+	rootCmd.PersistentFlags().StringSliceVarP(&siteTemplate, "siteTemplate", "s", siteTemplateDefault, "comma seperated list of site templates. See https://github.com/rjbrown57/lp/blob/main/config/site.yaml")
 
 	rootCmd.MarkFlagRequired("siteTemplate")
 	rootCmd.MarkFlagRequired("lpConfig")

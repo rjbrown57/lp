@@ -1,5 +1,5 @@
 lpconfig: # Basic config for lp
-  rootDir: /html
+  rootDir: ./html
   port: 8080
   tls:
     key: /tls/tls.key
