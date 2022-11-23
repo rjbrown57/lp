@@ -58,18 +58,32 @@ func monitorChanges(w *fsnotify.Watcher, siteTemplate []string, lp LpConfig) {
 		select {
 		// Read Errors
 		case err, ok := <-w.Errors:
-			if !ok { // Channel was closed (i.e. Watcher.Close() was called).
+			if !ok {
 				return
 			}
 			log.Fatalf("Fsnotify ERROR: %s", err)
-		// No matter what the return event is we should rerun writePages
-		case _, _ = <-w.Events:
-			// This should be tuned more, but in some cases we are too quick and the file is not finalized yet
-			// This seems to specifically happen when working with git functions
-			time.Sleep(1 * time.Second)
-			lp.sitedata = mergePages(siteTemplate)
-			lp.writePages()
-			log.Infof("Change detected. Regenerating...")
+		// Read events and writePages if appropriate
+		case event, ok := <-w.Events:
+			if !ok {
+				log.Fatalf("Channel closed %s", event.Name)
+			}
+
+			switch event.Op {
+			// Ignore chmod
+			case fsnotify.Chmod, fsnotify.Rename:
+				continue
+			// On create/remove we need to wait a second for the dust to settle. Otherwise we might read a a file that does not exist
+			// We need to add the new file to be monitored
+			case fsnotify.Create, fsnotify.Remove:
+				time.Sleep(1 * time.Second)
+				w.Add(event.Name)
+				fallthrough
+			default:
+				log.Infof("Change detected %s %s. Regenerating...", event.Op.String(), event.Name)
+				lp.sitedata = mergePages(siteTemplate)
+				lp.writePages()
+			}
+
 		}
 	}
 }
