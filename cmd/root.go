@@ -9,6 +9,7 @@ import (
 var cfgFile string
 var lpConfig string
 var siteTemplate []string
+var genFollow bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -16,7 +17,7 @@ var rootCmd = &cobra.Command{
 	Short: "Host a yaml based static link page",
 	Long:  `A yaml based static link page for every day work use.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		lp.Lp("serve", lpConfig, siteTemplate)
+		lp.Lp("serve", genFollow, lpConfig, siteTemplate)
 	},
 }
 
@@ -33,6 +34,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 	rootCmd.AddCommand(generateCmd)
+	generateCmd.PersistentFlags().BoolVarP(&genFollow, "follow", "f", false, "-f to watch for changes and regenerate")
 
 	siteTemplateDefault := []string{"config/site.yaml"}
 

@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/fsnotify/fsnotify"
 	"gopkg.in/yaml.v2"
@@ -116,8 +117,11 @@ func monitorChanges(w *fsnotify.Watcher, siteTemplate []string, lp LpConfig) {
 			log.Printf("Fsnotify ERROR: %s", err)
 		// No matter what the return event is we should rerun writePages
 		case _, _ = <-w.Events:
+			// This should be tuned more, but in some cases we are too quick and the file is not finalized yet
+			// This seems to specifically happen when working with git functions
+			time.Sleep(1 * time.Second)
 			lp.sitedata = mergePages(siteTemplate)
-			writePages(&lp.sitedata, lp.Lpconfig.RootDir)
+			lp.writePages()
 			log.Printf("Change detected. Regenerating...")
 		}
 	}
@@ -148,13 +152,14 @@ func mergePages(siteTemplate []string) SiteData {
 }
 
 // Lp calls mustUnmarshalYaml for configs, writePages to write appropriate files, serveLP to host
-func Lp(action string, lpconfig string, siteTemplate []string) {
+func Lp(action string, follow bool, lpconfig string, siteTemplate []string) {
 
 	// Create basic config object and
 	// Merge all site templates supplied by user
 	config := &LpConfig{
 		sitedata: mergePages(siteTemplate),
 	}
+
 	mustUnmarshalYaml(lpconfig, config)
 
 	var err error
@@ -170,15 +175,19 @@ func Lp(action string, lpconfig string, siteTemplate []string) {
 
 	log.Printf("Using %s as html root\n", config.Lpconfig.RootDir)
 
+	// Generate html pages
 	config.writePages()
 
 	// If we are called by generate, return without serving page
-	if action == "generate" {
-		return
+	switch action {
+	case "generate":
+		if !follow {
+			return
+		}
+	case "serve":
+		log.Printf("Serving LP on :%d\n", config.Lpconfig.Port)
+		go serveLP(config.Lpconfig.RootDir, fmt.Sprintf(":%d", config.Lpconfig.Port))
 	}
-
-	log.Printf("Serving LP on :%d\n", config.Lpconfig.Port)
-	go serveLP(config.Lpconfig.RootDir, fmt.Sprintf(":%d", config.Lpconfig.Port))
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)

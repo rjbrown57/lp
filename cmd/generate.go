@@ -11,6 +11,6 @@ var generateCmd = &cobra.Command{
 	Short: "generate html from yaml",
 	Long:  "generate html pages from yaml descriptions",
 	Run: func(cmd *cobra.Command, args []string) {
-		lp.Lp("generate", lpConfig, siteTemplate)
+		lp.Lp("generate", genFollow, lpConfig, siteTemplate)
 	},
 }
