@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"html/template"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -12,19 +11,20 @@ import (
 	"time"
 
 	"github.com/fsnotify/fsnotify"
+	log "github.com/rjbrown57/lp/pkg/logging"
 	"gopkg.in/yaml.v2"
 )
 
 func mustUnmarshalYaml(configPath string, v interface{}) {
-	log.Printf("Reading %s\n", configPath)
+	log.Infof("Reading %s\n", configPath)
 	yamlFile, err := ioutil.ReadFile(configPath)
 	if err != nil {
-		log.Printf("err opening %s   #%v\n", configPath, err)
+		log.Fatalf("err opening %s   #%v\n", configPath, err)
 		os.Exit(1)
 	}
 	err = yaml.Unmarshal(yamlFile, v)
 	if err != nil {
-		log.Printf("unmarhsal error   #%v\n", err)
+		log.Fatalf("unmarhsal error   #%v\n", err)
 		os.Exit(1)
 	}
 }
@@ -34,62 +34,9 @@ func processTemplate(templateName string, goTemplate string) *template.Template 
 	return template.Must(template.New(templateName).Parse(goTemplate))
 }
 
-// write pages
-// https://yourbasic.org/golang/append-to-file/
-// update to write generated tmpdir and then serve from that
-func writePages(siteData *SiteData, tDir string) {
-
-	var fileName string
-
-	for _, page := range siteData.Template.Pages {
-		if page.IsIndex {
-			fileName = fmt.Sprintf(tDir + "/index.html")
-		} else {
-			fileName = fmt.Sprintf(tDir + "/" + page.Name + ".html")
-		}
-		log.Printf("Creating %s\n", fileName)
-
-		file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
-			log.Printf("Failed to open %s #%v\n", page.Name, err)
-			os.Exit(1)
-		}
-
-		err = os.Truncate(fileName, 0)
-		if err != nil {
-			log.Printf("Unable to truncate file %s", fileName)
-		}
-
-		// render common
-		t := processTemplate("common", commonTemplate)
-		err = t.Execute(file, siteData)
-		if err != nil {
-			log.Printf("common template render error #%v\n", err)
-			os.Exit(1)
-		}
-
-		// render navbar
-		t = processTemplate("navbar", navbarTemplate)
-		err = t.Execute(file, siteData)
-		if err != nil {
-			log.Printf("navbar template render error #%v\n", err)
-			os.Exit(1)
-		}
-
-		// render body
-		t = processTemplate("body", bodyTemplate)
-		err = t.Execute(file, page)
-		if err != nil {
-			log.Printf("body template render error #%v\n", err)
-			os.Exit(1)
-		}
-
-	}
-}
-
 // serveLP
 func serveLP(htmlDir string, port string) {
-	log.Fatal(http.ListenAndServe(port, http.FileServer(http.Dir(htmlDir))))
+	log.Fatalf("Error serving page %s", http.ListenAndServe(port, http.FileServer(http.Dir(htmlDir))))
 }
 
 func getWatcher(siteTemplate []string) *fsnotify.Watcher {
@@ -99,7 +46,7 @@ func getWatcher(siteTemplate []string) *fsnotify.Watcher {
 	}
 
 	for _, site := range siteTemplate {
-		log.Printf("Watching %s for changes\n", site)
+		log.Infof("Watching %s for changes\n", site)
 		watcher.Add(site)
 	}
 
@@ -114,7 +61,7 @@ func monitorChanges(w *fsnotify.Watcher, siteTemplate []string, lp LpConfig) {
 			if !ok { // Channel was closed (i.e. Watcher.Close() was called).
 				return
 			}
-			log.Printf("Fsnotify ERROR: %s", err)
+			log.Fatalf("Fsnotify ERROR: %s", err)
 		// No matter what the return event is we should rerun writePages
 		case _, _ = <-w.Events:
 			// This should be tuned more, but in some cases we are too quick and the file is not finalized yet
@@ -122,7 +69,7 @@ func monitorChanges(w *fsnotify.Watcher, siteTemplate []string, lp LpConfig) {
 			time.Sleep(1 * time.Second)
 			lp.sitedata = mergePages(siteTemplate)
 			lp.writePages()
-			log.Printf("Change detected. Regenerating...")
+			log.Infof("Change detected. Regenerating...")
 		}
 	}
 }
@@ -167,13 +114,13 @@ func Lp(action string, follow bool, lpconfig string, siteTemplate []string) {
 	if config.Lpconfig.RootDir == "" {
 		config.Lpconfig.RootDir, err = os.MkdirTemp("/tmp/", "lp")
 		if err != nil {
-			log.Println("unable to create temporary directory")
+			log.Fatalf("unable to create temporary directory")
 		}
 
 		defer os.RemoveAll(config.Lpconfig.RootDir)
 	}
 
-	log.Printf("Using %s as html root\n", config.Lpconfig.RootDir)
+	log.Infof("Using %s as html root\n", config.Lpconfig.RootDir)
 
 	// Generate html pages
 	config.writePages()
@@ -185,7 +132,7 @@ func Lp(action string, follow bool, lpconfig string, siteTemplate []string) {
 			return
 		}
 	case "serve":
-		log.Printf("Serving LP on :%d\n", config.Lpconfig.Port)
+		log.Infof("Serving LP on :%d\n", config.Lpconfig.Port)
 		go serveLP(config.Lpconfig.RootDir, fmt.Sprintf(":%d", config.Lpconfig.Port))
 	}
 
@@ -200,7 +147,7 @@ func Lp(action string, follow bool, lpconfig string, siteTemplate []string) {
 
 	go func() {
 		sig := <-sigs
-		log.Printf("Received %s. Cleaning up %s\n", sig, config.Lpconfig.RootDir)
+		log.Infof("Received %s. Cleaning up %s\n", sig, config.Lpconfig.RootDir)
 		done <- true
 	}()
 
