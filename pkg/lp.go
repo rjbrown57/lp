@@ -105,7 +105,7 @@ func getWatcher(siteTemplate []string) *fsnotify.Watcher {
 	return watcher
 }
 
-func monitorChanges(w *fsnotify.Watcher, siteTemplate []string, tDir string) {
+func monitorChanges(w *fsnotify.Watcher, siteTemplate []string, lp LpConfig) {
 	for {
 		select {
 		// Read Errors
@@ -116,8 +116,8 @@ func monitorChanges(w *fsnotify.Watcher, siteTemplate []string, tDir string) {
 			log.Printf("Fsnotify ERROR: %s", err)
 		// No matter what the return event is we should rerun writePages
 		case _, _ = <-w.Events:
-			st := mergePages(siteTemplate)
-			writePages(&st, tDir)
+			lp.sitedata = mergePages(siteTemplate)
+			writePages(&lp.sitedata, lp.Lpconfig.RootDir)
 			log.Printf("Change detected. Regenerating...")
 		}
 	}
@@ -150,12 +150,14 @@ func mergePages(siteTemplate []string) SiteData {
 // Lp calls mustUnmarshalYaml for configs, writePages to write appropriate files, serveLP to host
 func Lp(action string, lpconfig string, siteTemplate []string) {
 
-	config := &LpConfig{}
+	// Create basic config object and
+	// Merge all site templates supplied by user
+	config := &LpConfig{
+		sitedata: mergePages(siteTemplate),
+	}
 	mustUnmarshalYaml(lpconfig, config)
-	var err error
 
-	//Merge all site templates supplied by user
-	st := mergePages(siteTemplate)
+	var err error
 
 	if config.Lpconfig.RootDir == "" {
 		config.Lpconfig.RootDir, err = os.MkdirTemp("/tmp/", "lp")
@@ -168,7 +170,7 @@ func Lp(action string, lpconfig string, siteTemplate []string) {
 
 	log.Printf("Using %s as html root\n", config.Lpconfig.RootDir)
 
-	writePages(&st, config.Lpconfig.RootDir)
+	config.writePages()
 
 	// If we are called by generate, return without serving page
 	if action == "generate" {
@@ -185,7 +187,7 @@ func Lp(action string, lpconfig string, siteTemplate []string) {
 	w := getWatcher(siteTemplate)
 	defer w.Close()
 
-	go monitorChanges(w, siteTemplate, config.Lpconfig.RootDir)
+	go monitorChanges(w, siteTemplate, *config)
 
 	go func() {
 		sig := <-sigs
