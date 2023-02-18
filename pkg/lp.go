@@ -3,10 +3,12 @@ package lp
 import (
 	"fmt"
 	"html/template"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 	"time"
 
@@ -14,6 +16,8 @@ import (
 	log "github.com/rjbrown57/lp/pkg/logging"
 	"gopkg.in/yaml.v2"
 )
+
+var cssUrl string = "https://unpkg.com/@primer/css@^20.2.4/dist/primer.css"
 
 func mustUnmarshalYaml(configPath string, v interface{}) {
 	log.Infof("Reading %s\n", configPath)
@@ -51,6 +55,31 @@ func getWatcher(siteTemplate []string) *fsnotify.Watcher {
 	}
 
 	return watcher
+}
+
+func DownloadCss(path string) error {
+	log.Infof("Downloading %s", cssUrl)
+	resp, err := http.Get(cssUrl)
+	if err != nil || resp.StatusCode > 200 {
+		return fmt.Errorf("failed to download from %s - %v , %d", cssUrl, err, resp.StatusCode)
+	}
+
+	defer resp.Body.Close()
+
+	out, err := os.Create(filepath.Clean(path))
+	if err != nil {
+		return err
+	}
+
+	defer out.Close()
+
+	_, err = io.Copy(io.MultiWriter(out), resp.Body)
+	if err != nil {
+		return err
+	}
+
+	log.Debugf("Download %s complete", cssUrl)
+	return nil
 }
 
 func monitorChanges(w *fsnotify.Watcher, siteTemplate []string, lp LpConfig) {
@@ -135,6 +164,11 @@ func Lp(action string, follow bool, lpconfig string, siteTemplate []string) {
 	}
 
 	log.Infof("Using %s as html root\n", config.Lpconfig.RootDir)
+
+	// Grab css
+	if err := DownloadCss(config.Lpconfig.RootDir + "/primer.css"); err != nil {
+		log.Fatalf("Unable to download Css - %s", err)
+	}
 
 	// Generate html pages
 	config.writePages()

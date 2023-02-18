@@ -10,7 +10,7 @@ const commonTemplate = `<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://unpkg.com/@primer/css@^16.0.0/dist/primer.css" rel="stylesheet" />
+<link href="primer.css" rel="stylesheet" />
 </head>
 `
 
