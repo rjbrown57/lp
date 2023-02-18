@@ -1,6 +1,3 @@
-FROM ubuntu:22.04 as base
-
-FROM scratch
-COPY --from=base /tmp/ /tmp/
+FROM alpine:latest
 COPY lp /lp
 ENTRYPOINT ["./lp"]
