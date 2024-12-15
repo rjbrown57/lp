@@ -1,0 +1,4 @@
+lpconfig: # Basic config for lp
+  rootDir: ./html
+  port: 8080
+  sitename: lp
